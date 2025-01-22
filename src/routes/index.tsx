@@ -1,5 +1,10 @@
 import { component$ } from '@builder.io/qwik';
 
 export default component$(() => {
-  return <div>Llamas rules</div>;
+  return (
+    <>
+      <span>Hello world</span>
+      <button onClick$={() => console.log('You clicked me!')}>Click me!</button>
+    </>
+  );
 });
