@@ -1,7 +1,19 @@
-import { component$, Slot, useSignal } from '@builder.io/qwik';
+import { component$, Slot, useSignal, useTask$ } from '@builder.io/qwik';
 
 export default component$(() => {
   const textSignal = useSignal('');
+  const colorSignal = useSignal('black');
+
+  useTask$(({ track }) => {
+    track(() => textSignal.value);
+    const toTrack = 'llama';
+
+    if (textSignal.value.toLowerCase() === toTrack) {
+      colorSignal.value = 'red';
+    } else {
+      colorSignal.value = 'black';
+    }
+  });
 
   return (
     <div>
@@ -9,15 +21,19 @@ export default component$(() => {
       <hr />
       <input bind:value={textSignal} type='text' placeholder='Type your search' />
       <hr />
-      {textSignal.value && <Projector value={textSignal.value}>You typed: </Projector>}
+      {textSignal.value && (
+        <Projector value={textSignal.value} color={colorSignal.value}>
+          You typed:{' '}
+        </Projector>
+      )}
     </div>
   );
 });
 
-const Projector = component$(({ value }: { value: string }) => {
+const Projector = component$(({ value, color }: { value: string; color?: string }) => {
   return (
     <div>
-      <Slot /> {value}
+      <Slot /> <span style={{ color }}>{value}</span>
     </div>
   );
 });
