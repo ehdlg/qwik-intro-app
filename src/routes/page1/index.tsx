@@ -1,13 +1,19 @@
-import { component$ } from '@builder.io/qwik';
+import { component$, useSignal } from '@builder.io/qwik';
 
 export default component$(() => {
+  const textSignal = useSignal('');
+
   return (
     <div>
       This is Page 1
       <hr />
-      <input onKeyDown$={(e) => console.log(e.key)} type='text' placeholder='Type your search' />
+      <input bind:value={textSignal} type='text' placeholder='Type your search' />
       <hr />
-      <div>You typed: </div>
+      {textSignal.value && <Projector value={textSignal.value} />}
     </div>
   );
+});
+
+const Projector = component$(({ value }: { value: string }) => {
+  return <div>You typed: {value}</div>;
 });
